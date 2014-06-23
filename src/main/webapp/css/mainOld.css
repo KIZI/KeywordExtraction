@@ -1,0 +1,18 @@
+@CHARSET "UTF-8";
+body                        { font-family: "Arial CE", Arial, "Helvetica CE", Helvetica, sans-serif; font-size: 12px; font-weight: normal; color: #333333; background: white; text-align: left; }
+a                           { color: #1F75CC; text-decoration: none; }
+a:hover                     { text-decoration: underline; }
+fieldset                    { border: 1px solid #999; padding: 1em; }
+legend                      { font-weight: bold; padding: .5em; }
+ul                          { list-style-type: none; }
+label                       { display: block; }
+
+textarea                    { width: 100%; height: 80px; }
+
+#german                     { float: left; width: 49%; }
+#dutch                      { margin-left: 51%; }
+table                       { border-collapse: collapse; }
+th, td                      { padding: .3em .8em; }
+th                          { background: #ddd; }
+
+pre                         { overflow: auto; margin: 1em; }

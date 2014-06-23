@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence">
+  <persistence-unit name="keywordsPU" transaction-type="RESOURCE_LOCAL">
+    <non-jta-data-source>jdbc/MySQLConnection</non-jta-data-source>
+    <class>eu.linkedtv.keywords.models.v1.TextFile</class>
+    <class>eu.linkedtv.keywords.models.v1.DutchTextFile</class>
+    <class>eu.linkedtv.keywords.models.v1.GermanTextFile</class>
+    <class>eu.linkedtv.keywords.models.v1.Keyword</class>
+    <class>eu.linkedtv.keywords.models.v1.DutchKeyword</class>
+    <class>eu.linkedtv.keywords.models.v1.GermanKeyword</class>
+    <class>eu.linkedtv.keywords.models.v1.KeywordsOccurrence</class>
+    <class>eu.linkedtv.keywords.models.v1.DutchKeywordsOccurrence</class>
+    <class>eu.linkedtv.keywords.models.v1.GermanKeywordsOccurrence</class>
+    <class>eu.linkedtv.keywords.models.v1.KeywordsOccurrencePK</class>
+    <class>eu.linkedtv.keywords.models.v2.TextFile</class>
+    <class>eu.linkedtv.keywords.models.v2.Keyword</class>
+    <class>eu.linkedtv.keywords.models.v2.KeywordsOccurrence</class>
+    <class>eu.linkedtv.keywords.models.v2.KeywordsOccurrencePK</class>
+    <class>eu.linkedtv.keywords.models.v2.User</class>
+    <properties>
+      <property name="eclipselink.weaving" value="false"/>
+    </properties>
+  </persistence-unit>
+</persistence>

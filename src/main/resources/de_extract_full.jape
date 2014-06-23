@@ -1,0 +1,16 @@
+Phase:	EntityExtraction
+Input:  Token
+Options: control = appelt
+
+
+Rule: DE_Keyword
+Priority: 40
+
+(
+({Token.category=="NN"} |
+{Token.category=="NP"} |
+{Token.category=="NE"})+
+)
+:keyword
+--> 
+:keyword.keyword= {rule = "Keyword"}

@@ -1,0 +1,9 @@
+target
+asr_files
+cocoon-files
+keyword_files
+subtitles
+tmp
+treetagger
+**/nb-configuration.xml
+**/nbactions.xml

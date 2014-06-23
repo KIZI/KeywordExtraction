@@ -1,0 +1,65 @@
+Phase:	EntityExtraction
+Input:  Token
+Options: control = appelt
+
+
+Rule: DE_NE_Keyword_Simple
+Priority: 40
+
+(
+(({Token.category=="adj",Token.orth=="upperInitial"})|
+({Token.category=="adj",Token.orth=="mixedCaps"})|({Token.category=="nounsg",Token.orth=="upperInitial"})|({Token.category=="nounprop"})|({Token.category=="nounpl",Token.orth=="upperInitial"}))+
+)
+:keyword
+--> 
+:keyword.keyword= {rule = "DE_NE_Keyword_Simple"}
+
+
+
+
+Rule: DE_Keyword_APOSTR
+Priority: 40
+
+(
+(({Token.category=="adj",Token.orth=="upperInitial"})|
+({Token.category=="adj",Token.orth=="mixedCaps"})|({Token.category=="nounsg",Token.orth=="upperInitial"})|({Token.category=="nounprop"})|({Token.category=="nounpl",Token.orth=="upperInitial"}))+
+({Token.string=="'"})+
+(({Token.category=="adj",Token.orth=="upperInitial"})|
+({Token.category=="adj",Token.orth=="mixedCaps"})|({Token.category=="nounsg",Token.orth=="upperInitial"})|({Token.category=="nounprop"})|({Token.category=="nounpl",Token.orth=="upperInitial"}))+
+)
+:keyword
+--> 
+:keyword.keyword= {rule = "DE_Keyword_Simple_APOSTR"}
+
+
+Rule: DE_Keyword_COMPOUND
+Priority: 40
+
+(
+(({Token.category=="adj",Token.orth=="upperInitial"})|
+({Token.category=="adj",Token.orth=="mixedCaps"})|({Token.category=="nounsg",Token.orth=="upperInitial"})|({Token.category=="nounprop"})|({Token.category=="nounpl",Token.orth=="upperInitial"}))+
+({Token.category=="det__art"}|{Token.category=="conjcoord"}|{Token.string=="-"})+
+(({Token.category=="adj",Token.orth=="upperInitial"})|
+({Token.category=="adj",Token.orth=="mixedCaps"})|({Token.category=="nounsg",Token.orth=="upperInitial"})|({Token.category=="nounprop"})|({Token.category=="nounpl",Token.orth=="upperInitial"}))+
+)
+:keyword
+--> 
+:keyword.keyword= {rule = "DE_Keyword_Simple_APOSTR"}
+
+Rule: DE_Keyword_Simple
+Priority: 40
+
+({Token.category=="adj"})*({Token.category=="nounsg",Token.orth=="lowercase"})+
+:keyword
+--> 
+:keyword.keyword= {rule = "DE_Keyword_Simple"}
+
+
+Rule: DE_Keyword_Simple_plural
+Priority: 40
+
+({Token.category=="adj"})*({Token.category=="nounpl",Token.orth=="lowercase"})+
+:keyword
+--> 
+:keyword.keyword= {rule = "DE_Keyword_SimplePlural"}
+

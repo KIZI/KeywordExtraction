@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Linked TV Keyword extraction tool - Developer Documentation</title>
+<link rel="stylesheet" href="css/mainOld.css" type="text/css" media="all" />
+</head>
+<body>
+    <h1>Linked TV Keyword extraction tool - Developer Documentation</h1>
+    <p>The keyword extraction tool provides a web form, where you can paste any plain text and the service shows top 20 extracted keywords.</p>
+    
+    <h2>RESTful Web Service V2</h2>
+    <p>Apart from the web form, there is also a RESTful web service available on the following addresses: <a href="/KeywordExtraction/rest/v2">https://ner.vse.cz/KeywordExtraction/rest/v2</a></p>
+
+    <h3>User registration</h3>
+    <p>Prior to sending requests to the rest service, it is necessary to register a new user.</p>
+    <pre>
+curl -d "userName=user&password=1234" https://ner.vse.cz/KeywordExtraction/rest/v2/user
+    </pre>    
+    
+    <p>The server returns authentication key, which is needed for all further API calls.</p>
+    <p>Example response:</p>
+    <pre>
+1ecad8185ab0226505614c48712de6e96d2126ef    
+    </pre>
+    
+    <p>It is also possible to authenticate using the userName and password later in order to obtain the authentication key</p>
+    <pre>
+curl -H "userName:user" -H "password:1234" https://ner.vse.cz/KeywordExtraction/rest/v2/user
+    </pre>
+    
+    <h3>Available REST requests</h3>
+    <p>Following table lists available requests you can use to get results from our web service. The urls are relative to the above stated absolute url. Thus / stands for https://ner.vse.cz/KeywordExtraction/rest/v2</p>
+    
+    <p>The response can be retrieved in JSON or in XML format depending on <code>Accept</code> request headers.</p>
+    
+    <table>
+        <tr><th>URL</th><th>Request type</th><th>Result</th><th>Description</th></tr>
+        <tr><td>/</td><td>GET</td><td>JSON or XML list</td><td>Lists all files submitted to Keyword extraction tool</td></tr>
+        <tr><td>/{language}</td><td>POST</td><td>Id of the submitted file</td><td>Submits a new file to the service. You can use the returned ID to get all keywords in the file. It is necessary to pass the language of the file in order to use the correct indexer. Supported options are: english, dutch or german.
+        </td></tr>
+        <tr><td>/{fileId}</td><td>DELETE</td><td>"deleted: true" in case of successful deletion.</td><td>Deletes the file with given {fileId} from the database.</td></tr>
+        <tr><td>/{fileId}</td><td>GET</td><td>JSON or XML list</td><td>Returns the list of top 20 keywords identified in the file with {fileId}.</td></tr>
+    </table>
+    
+    <p>Each request has to contain the header userKey with the value set to the authentication key of a registered user.</p>
+    
+    <h3>Submition of a file</h3>
+    <p>When posting a new file to the Keyword extraction tool it is necessary to specify the language of the file in the url and two POST parameters:</p>
+    <ul>
+        <li>fileName - short description of the content</li>
+        <li>fileText - the content itself</li>
+    </ul>
+    
+    <p>Example call submitting a single file under the name testFile:</p>
+    <pre>
+curl -H "userKey:1ecad8185ab0226505614c48712de6e96d2126ef" -d "fileName=testFile&fileText=Jetzt in Brandenburg Aktuell Flughafen Chefs legen Rechenschaft vor Aufsichtsrat ab Brandenburger Fans schockiert über Hertha Debakel und neue Erkenntnisse im Mordfall Scholl Guten Abend meine Damen und Herren willkommen zu Brandenburg Aktuell die Erwartungen sind groß heute sollen Fakten auf den Tisch wie es mit dem neuen Flughafen weitergeht so war es versprochen worden die Projektgruppe tagt und der Aufsichtsrat unser Flughafen Experte Ludger Smolker ist in Schönefeld ist denn schon etwas von den Beratungen nach außen gedrungen Ludger na die Gerüchteküche brodelt also es wird schon gesagt dass möglicherweise einer der beiden äh Geschäftsführer seinen Hut will muss möglicherweise heute haben das wurde gesagt dass es möglicherweise haben äh wirkender Tsd nutzten zweitausend dreizehn ein Neuner feste wehende dortige sagt das alles Gerüchte genauso weiß man nicht ich habe vor zwei Dreiminuten normal mit Rolf Funkel den Flughafensprecher angeredet sie hat mir sagt dass äh eben nicht nur die Aufsichtsratsmitglieder Mitte Geschäftsführung bewegen zumal das Plan eingeladen sind das Airlines verweisen aufhören dann angesprochen werden dass man sehr dicht erhielt nun durch das ganze Debakel durchführt durch gelten dass diese Sitzung keinen wirklich dessen nach Stunden wissen haben unterstellten haben Stunden dauern kann ein darüberhinaus äh kann man wirklich auf feststellen Mängelliste ist sehr langen werden so auch Postminister dem achten Mai erfahren hat seitdem der Eröffnungstermin verschoben wurde ähm sage sehr viel zu bereden was alles passiert ist das Angelegenheit zusammengestellt achter Mai Paukenschlag große Pressekonferenz nun diese Herren Linie blamierten sich gewaltig die Flughafen Eröffnung geplatzt bei Millau nicht das stocksauer bin kein guter Tag für die Bürgerinnen." https://ner.vse.cz/KeywordExtraction/rest/v2/german
+    </pre>
+    
+    <p>Response of the call:</p>
+    
+    <pre>
+ { fileId: 1 }
+    </pre>
+    
+    <h3>Listing keywords extracted from the file</h3>
+    
+    <p>To list keywords in a given file simply form a get request like this:</p>
+    <pre>curl -H "userKey:1ecad8185ab0226505614c48712de6e96d2126ef" https://ner.vse.cz/KeywordExtraction/rest/v2/1</pre>
+    
+    <p>An example list of keywords together with the original text of the file in JSON format looks like this:</p>
+    
+    <pre>
+{
+    "keywords":
+        [
+          {
+            "confidence" : 0.16666664027777744,
+            "word" : "Monat Satz"
+          },
+          {
+            "confidence" : 0.16666664027777744,
+            "word" : "Tabak"
+          }     
+        ],
+    "originalText":"..."
+}   
+    </pre>
+
+<hr />
+<hr />
+
+<h3 style="color: #b00">Disclaimer: RESTful Web Service V1 is still accessible but not maintained any more!</h3>
+    
+    <h2>RESTful Web Service V1</h2>
+    <p>Apart from the web form, there is also a RESTful web service on following addresses:</p>
+    <ul>
+        <li><a href="/LTVKeywords/rest/v1/german">https://ner.vse.cz/KeywordExtraction/rest/v1/german</a> - for German texts</li>
+        <li><a href="/LTVKeywords/rest/v1/dutch">https://ner.vse.cz/KeywordExtraction/rest/v1/dutch</a> - for Dutch texts</li>
+    </ul>
+    
+    <h3>Available REST requests</h3>
+    <p>Following table lists available requests you can use to get results from our web service. The urls are relative to the above stated absolute urls for different languages. Thus / stands for https://ner.vse.cz/KeywordExtraction/rest/v1/german/ or https://ner.vse.cz/KeywordExtraction/rest/v1/dutch/</p>
+    
+    <p>The response can be retrieved in JSON or in XML format depending on <code>Accept</code> request headers.</p>
+    
+    <table>
+        <tr><th>URL</th><th>Request type</th><th>Result</th><th>Description</th></tr>
+        <tr><td>/</td><td>GET</td><td>JSON or XML list</td><td>Lists all files submitted to Keyword extraction tool</td></tr>
+        <tr><td>/</td><td>POST</td><td>Id of the submitted file</td><td>Submits a new file to the service. You can use the returned ID to get all keywords in the file.</td></tr>
+        <tr><td>/{fileId}</td><td>DELETE</td><td>"deleted: true" in case of successful deletion.</td><td>Deletes the file with given {fileId} from the database.</td></tr>
+        <tr><td>/{fileId}</td><td>GET</td><td>JSON or XML list</td><td>Returns the list of top 20 keywords identified in the file with {fileId}.</td></tr>
+    </table> 
+    
+    <h3>Submition of a file</h3>
+    <p>When posting a new file to the Keyword extraction tool it is necessary to specify two parameters:</p>
+    <ul>
+        <li>fileName - short description of the content</li>
+        <li>fileText - the content itself</li>
+    </ul>
+    
+    <p>Example call submitting a single file under the name testFile:</p>
+    <pre>
+curl -d "fileName=testFile&fileText=Jetzt in Brandenburg Aktuell Flughafen Chefs legen Rechenschaft vor Aufsichtsrat ab Brandenburger Fans schockiert über Hertha Debakel und neue Erkenntnisse im Mordfall Scholl Guten Abend meine Damen und Herren willkommen zu Brandenburg Aktuell die Erwartungen sind groß heute sollen Fakten auf den Tisch wie es mit dem neuen Flughafen weitergeht so war es versprochen worden die Projektgruppe tagt und der Aufsichtsrat unser Flughafen Experte Ludger Smolker ist in Schönefeld ist denn schon etwas von den Beratungen nach außen gedrungen Ludger na die Gerüchteküche brodelt also es wird schon gesagt dass möglicherweise einer der beiden äh Geschäftsführer seinen Hut will muss möglicherweise heute haben das wurde gesagt dass es möglicherweise haben äh wirkender Tsd nutzten zweitausend dreizehn ein Neuner feste wehende dortige sagt das alles Gerüchte genauso weiß man nicht ich habe vor zwei Dreiminuten normal mit Rolf Funkel den Flughafensprecher angeredet sie hat mir sagt dass äh eben nicht nur die Aufsichtsratsmitglieder Mitte Geschäftsführung bewegen zumal das Plan eingeladen sind das Airlines verweisen aufhören dann angesprochen werden dass man sehr dicht erhielt nun durch das ganze Debakel durchführt durch gelten dass diese Sitzung keinen wirklich dessen nach Stunden wissen haben unterstellten haben Stunden dauern kann ein darüberhinaus äh kann man wirklich auf feststellen Mängelliste ist sehr langen werden so auch Postminister dem achten Mai erfahren hat seitdem der Eröffnungstermin verschoben wurde ähm sage sehr viel zu bereden was alles passiert ist das Angelegenheit zusammengestellt achter Mai Paukenschlag große Pressekonferenz nun diese Herren Linie blamierten sich gewaltig die Flughafen Eröffnung geplatzt bei Millau nicht das stocksauer bin kein guter Tag für die Bürgerinnen." https://ner.vse.cz/KeywordExtraction/rest/v1/german
+    </pre>
+    
+    <p>Response of the call:</p>
+    
+    <pre>
+ { fileId: 1 }
+    </pre>
+    
+    <h3>Listing keywords extracted from the file</h3>
+    
+    <p>To list keywords in a given file simply form a get request like this:</p>
+    <pre>curl https://ner.vse.cz/KeywordExtraction/rest/v1/german/1</pre>
+    
+    <p>An example list of keywords in JSON format looks like this:</p>
+    
+    <pre>
+[
+  {
+    "confidence" : 0.16666664027777744,
+    "word" : "Monat Satz"
+  },
+  {
+    "confidence" : 0.16666664027777744,
+    "word" : "Tabak"
+  }     
+]   
+    </pre>
+    
+    <h3>Authentication</h3>
+    <p>Currently our web service is password protected. So you have to authenticate yourself when sending requests to the service. For example with curl you can authenticate the request like this:</p>
+    <pre>curl --user name:password http://www.example.com</pre>
+   
+</body>
+</html>
