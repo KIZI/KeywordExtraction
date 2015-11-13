@@ -7,3 +7,5 @@ tmp
 treetagger
 **/nb-configuration.xml
 **/nbactions.xml
+.idea/
+LTVKeywords.iml

@@ -1,5 +1,6 @@
 package eu.linkedtv.keywords.v2.rest;
 
+import com.sun.jersey.spi.resource.Singleton;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
